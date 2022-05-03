@@ -1,9 +1,8 @@
 import java.util.* ;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-// Written by Aditi B
+// Written by Aditi
 // spin-off of wordle
-// but with bits
+// but with bits && bytes
 class Main {
   public static void main(String[] args) {
     
@@ -32,14 +31,17 @@ class Main {
 
     //and, now to the game
     while(!is_play_over) {
+      for (int i = past_guesses.size() - 1; i >= 0; i--) {
+        past_guesses.remove(past_guesses.get(i)) ;
+      }
         
       is_game_over = false ;
 
       // player action...
       System.out.print(".................................... \n" + 
                         "Would you like to:\n" + 
-                        "  e - enable/disable byte mode?\n" +
                         "  p - play the game?\n" +
+                        "  e - enable/disable byte mode?\n" +
                         "  q - quit?\n" + 
                         "enter the mode's corresponding letter \n>>") ;
       String play = s.nextLine() ;
@@ -47,7 +49,8 @@ class Main {
 
       if (play.equals("q")) { // QUITTING
         is_play_over = true ;
-        System.out.println("You have sucessfully quit :)") ;
+        System.out.println("You have sucessfully quit bittle :)\n" + 
+                            "Have a \"binary\"-ific day!") ;
       } 
       else if (play.equals("e")) { // BYTE MODE
        String toggle = "" ;
@@ -63,7 +66,7 @@ class Main {
         }
         System.out.println("Eight bits make a byte!\n" + 
         "You have successfully " + toggle + " byte mode\n" + 
-        "................................................") ;
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") ;
       }
       else if (play.equals("p")) {// -- PLAY GAME
         System.out.println("Starting game now.") ;
@@ -72,40 +75,39 @@ class Main {
         String ans = "" ;
         for (int i = 0; i < len; i++) {
           int idek = (int)(Math.random() * 2) ;
-          if (idek == 0){
+          if (idek == 0)
             ans += "0" ;
-          }
-          else { // idek == 1
+          else // idek == 1
             ans += "1" ;
-          }
         }
         
         while (!is_game_over) {
+          
           String guess = "" ;
-          boolean isBinary = false ;
+
           // taking a guess
           // note that len usually = 1, unless you're in byte mode (len == 8)
-          System.out.println("enter your next guess..............") ;
-          while (guess.length() != len && !isBinary) {
-            isBinary = true ;
+          // TODO: guess history picks up on things that aren't 0 or 1 - track this down!
+          System.out.println("enter your next guess............................") ;
+
+          while (!isStringCorrectLength(guess, len) || !isStringBinary(guess)) {
+            //taking a guess from user
             System.out.print("only " + len + " bits (either 0 or 1) allowed:\n>>") ;
             guess = s.nextLine() ;
-            for (int i = 0; i < guess.length(); i++) {
-              if (guess.substring(i, i+1) != "1" && guess.substring(i, i+1) != "0") {
-                isBinary = false ;
-              }
-            }
           }
+
+          //incrimenting guess count and complimenting player
+          System.out.println("nice guess!") ;
           guess_count += 1 ;
 
-          //comparing
+          //comparing Strings and printing
           String printing = "" ;
           boolean incorrect = false ;
-          for(int i = 0; i < len; i++) {
+          for(int i = 0; i < guess.length(); i++) {
             String ans_letter = ans.substring(i, i+1) ;
             String guess_letter = guess.substring(i, i+1) ;
             if (ans_letter.equals(guess_letter)) { // right bit, right pos
-              printing += guess_letter + "    " ;
+              printing += " " + guess_letter + "   " ;
             }
             else { // (ans.indexOf(guess_letter) != -1) // wrong bit, wrong pos
               printing += "*" + guess_letter + "*  " ;
@@ -115,20 +117,63 @@ class Main {
 
           //printing
           past_guesses.add(printing) ;
-          if (!incorrect) {
-            System.out.println("*******************************\n" + 
-                               "YOU WIN! \nGAME OVER!\n" + 
-                               "You took " + guess_count + " guesses\n" +
-                               "The bit was: " + ans + 
-                               "\n*******************************\n");    
-            is_game_over = true ;  
+          printPastGuesses(past_guesses);
+
+          if (!incorrect) {   
+            is_game_over = youWinOnceAgain(guess_count, len, ans) ;
           }
         }    
       } else { //bc sometimes people be dumb and don't follow instructions
         System.out.println("please input one of the options.");
       }
+    }  
+  }
+
+  // and now, for my little code-packages (aka methods aka functions aka procedures)
+  /* "Brown paper packages tied up with strings...
+      These are a few of my favorite things..."
+  */
   
+  public static boolean isStringBinary(String g) {
+    boolean ret = true ;
+    //checking if the string is in binary (0 and/or 1)
+    for (int i = 0; i < g.length(); i++) {
+      if (!(g.substring(i, i+1).equals("1")) && !(g.substring(i, i+1).equals("0"))) {
+        ret = false ;
+      }
+    }
+    return ret ;
+  }
+  public static boolean isStringCorrectLength(String g, int l) {
+    boolean ret = true ;
+    if (g.length() != l) {
+      ret = false ;
+    }
+    return ret ;
+  }
+  public static void printPastGuesses(ArrayList<String> past) {
+    //printing
+    System.out.print("Guess History\n");
+    for (int i = 0; i < past.size(); i++) {
+      System.out.print(past.get(i) + "\n");
     }
   }
+  public static boolean youWinOnceAgain(int gc, int l, String a) {
+    System.out.println("*******************************\n" + 
+                      "GAME OVER!\n" + 
+                      "You took " + gc + " guesses\n" +
+                      "The " + konstantFinder(l) + " was: " + a + 
+                      "\n*******************************\n");    
+    return true ;
+  }
+  public static String konstantFinder(int length) {
+    String konstant ;
+    if (length == 1) 
+      konstant = "bit" ;
+    else 
+      konstant = "byte" ;
+    return konstant ;
+  }
+  
 }
 
