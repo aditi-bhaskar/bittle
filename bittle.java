@@ -29,8 +29,8 @@ class Main {
       // player action...
       System.out.print(".................................... \n" + 
                         "Would you like to:\n" + 
-                        "  p - play the game?\n" +
-                        "  e - enable/disable byte mode?\n" +
+                        "  p - play bit mode (novice)?\n" +
+                        "  a - play byte mode (advanced)?\n" +
                         "  q - quit?\n" + 
                         "enter the mode's corresponding letter \n>>") ;
       String play = s.nextLine() ;
@@ -41,23 +41,9 @@ class Main {
         System.out.println("You have sucessfully quit bittle :)\n" + 
                             "Have a \"binary\"-ific day!") ;
       } 
-      else if (play.equals("e")) { // BYTE MODE
-       String toggle = "" ;
-       if (byte_mode) {
-         byte_mode = false ;
-         len = 1 ;
-         toggle = "disabled" ;
-       }
-       else {
-         byte_mode = true ;
-         len = 8 ;
-         toggle = "enabled" ;
-        }
-        System.out.println("Eight bits make a byte!\n" + 
-        "You have successfully " + toggle + " byte mode\n" + 
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") ;
-      }
-      else if (play.equals("p")) {// -- PLAY GAME
+      if (play.equals("p") || play.equals("a")) {// -- PLAY GAME
+        // P = regular (bit) mode
+        // A = byte mode
         System.out.println("Starting game now.") ;
 
         System.out.println(".................................... \n" +
@@ -71,8 +57,23 @@ class Main {
         " >>  letter  (by itself) means it's in bit, correct spot\n" +
         "good luck!\n................................ \n") ;
 
-        guess_count = 0 ;
-        
+        // switching to/fro      
+        String toggle = "" ;
+        if (play.equals("p")) {
+          byte_mode = false ;
+          len = 1 ;
+          toggle = "bit mode" ;
+        }
+        else { // play.equals("a")
+          byte_mode = true ;
+          len = 8 ;
+          toggle = "byte mode" ;
+        }
+        System.out.println("Eight bits make a byte!\n" + 
+        "You are playing " + toggle + "\n\n") ;
+
+
+        //now, randomly creating the answer
         String ans = "" ;
         for (int i = 0; i < len; i++) {
           int idek = (int)(Math.random() * 2) ;
@@ -82,6 +83,8 @@ class Main {
             ans += "1" ;
         }
         
+        // starting the play
+        guess_count = 0 ;
         while (!is_game_over) {
           
           String guess = "" ;
