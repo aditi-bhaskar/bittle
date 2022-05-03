@@ -1,4 +1,6 @@
 import java.util.* ;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 // Written by Aditi B
 // spin-off of wordle
 // but with bits
@@ -9,7 +11,7 @@ class Main {
     boolean is_play_over = false ;
     boolean is_game_over = false ;
 
-    System.out.println("\nPLAYING BITTLE \n\n") ; 
+    System.out.println("\n\n~~~~ PLAYING BITTLE ~~~~\n") ; 
 
     System.out.println(".................................... \n" +
                         "How to play:\n" +
@@ -20,7 +22,7 @@ class Main {
                         " >> *letter* means it's not in the bit\n" +
                         " >> +letter+ means it's in bit, incorrect spot\n" +
                         " >>  letter  (by itself) means it's in bit, correct spot\n" +
-                        "good luck!\n ***** \n") ;
+                        "good luck!\n ................................ \n") ;
     
     //other initializations
     ArrayList<String> past_guesses = new ArrayList<String>() ;
@@ -36,9 +38,7 @@ class Main {
       // player action...
       System.out.print(".................................... \n" + 
                         "Would you like to:\n" + 
-                        "  a - add to your lexicon (dictionary)?\n" +
-                        "  e - enable/disable random-length mode?\n" +
-                        "  s - see your dictionary?\n" +  
+                        "  e - enable/disable byte mode?\n" +
                         "  p - play the game?\n" +
                         "  q - quit?\n" + 
                         "enter the mode's corresponding letter \n>>") ;
@@ -50,21 +50,23 @@ class Main {
         System.out.println("You have sucessfully quit :)") ;
       } 
       else if (play.equals("e")) { // BYTE MODE
-       System.out.println("Eight bits make a byte") ;
+       String toggle = "" ;
        if (byte_mode) {
          byte_mode = false ;
          len = 1 ;
+         toggle = "disabled" ;
        }
        else {
          byte_mode = true ;
          len = 8 ;
+         toggle = "enabled" ;
         }
+        System.out.println("Eight bits make a byte!\n" + 
+        "You have successfully " + toggle + " byte mode\n" + 
+        "................................................") ;
       }
       else if (play.equals("p")) {// -- PLAY GAME
-        //separation of key word and game
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" + 
-        "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"+
-        "Starting game now.") ;
+        System.out.println("Starting game now.") ;
         guess_count = 0 ;
         
         String ans = "" ;
@@ -80,15 +82,17 @@ class Main {
         
         while (!is_game_over) {
           String guess = "" ;
+          boolean isBinary = false ;
           // taking a guess
           // note that len usually = 1, unless you're in byte mode (len == 8)
-          System.out.println("enter your guess") ;
-          while (guess.length() != len) {
+          System.out.println("enter your next guess..............") ;
+          while (guess.length() != len && !isBinary) {
+            isBinary = true ;
             System.out.print("only " + len + " bits (either 0 or 1) allowed:\n>>") ;
             guess = s.nextLine() ;
             for (int i = 0; i < guess.length(); i++) {
-              if (guess.substring(i, i+1) != "0" && guess.substring(i, i+1) !="1") {
-                guess = "nope" ;
+              if (guess.substring(i, i+1) != "1" && guess.substring(i, i+1) != "0") {
+                isBinary = false ;
               }
             }
           }
@@ -100,10 +104,10 @@ class Main {
           for(int i = 0; i < len; i++) {
             String ans_letter = ans.substring(i, i+1) ;
             String guess_letter = guess.substring(i, i+1) ;
-            if (ans_letter.equals(guess_letter)) {
+            if (ans_letter.equals(guess_letter)) { // right bit, right pos
               printing += guess_letter + "    " ;
             }
-            else { // (ans.indexOf(guess_letter) != -1)
+            else { // (ans.indexOf(guess_letter) != -1) // wrong bit, wrong pos
               printing += "*" + guess_letter + "*  " ;
               incorrect = true ;
             }
@@ -121,7 +125,7 @@ class Main {
           }
         }    
       } else { //bc sometimes people be dumb and don't follow instructions
-        System.out.println("guess the bit. only 0's and 1's.");
+        System.out.println("please input one of the options.");
       }
   
     }
