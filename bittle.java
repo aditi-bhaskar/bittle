@@ -11,17 +11,6 @@ class Main {
     boolean is_game_over = false ;
 
     System.out.println("\n\n~~~~ PLAYING BITTLE ~~~~\n") ; 
-
-    System.out.println(".................................... \n" +
-                        "How to play:\n" +
-                        "A \"bit\" is a one or zero. bits represent stuffs in binary." + 
-                        "enter a starting BIT," +
-                        "then repeatedly enter more bits\n" +
-                        "until you guess the correct bit \n" +
-                        " >> *letter* means it's not in the bit\n" +
-                        " >> +letter+ means it's in bit, incorrect spot\n" +
-                        " >>  letter  (by itself) means it's in bit, correct spot\n" +
-                        "good luck!\n ................................ \n") ;
     
     //other initializations
     ArrayList<String> past_guesses = new ArrayList<String>() ;
@@ -70,6 +59,18 @@ class Main {
       }
       else if (play.equals("p")) {// -- PLAY GAME
         System.out.println("Starting game now.") ;
+
+        System.out.println(".................................... \n" +
+        "How to play:\n" +
+        "A \"bit\" is a one or zero. bits represent stuff in binary." + 
+        "enter a starting BIT," +
+        "then repeatedly enter more bits\n" +
+        "until you guess the correct bit \n" +
+        " >> *letter* means it's not in the bit\n" +
+        " >> +letter+ means it's in bit, incorrect spot\n" +
+        " >>  letter  (by itself) means it's in bit, correct spot\n" +
+        "good luck!\n................................ \n") ;
+
         guess_count = 0 ;
         
         String ans = "" ;
@@ -159,7 +160,7 @@ class Main {
   }
   public static boolean youWinOnceAgain(int gc, int l, String a) {
     System.out.println("*******************************\n" + 
-                      "GAME OVER!\n" + 
+                      "YOU WIN! \nGAME OVER!\n" + 
                       "You took " + gc + " guesses\n" +
                       "The " + konstantFinder(l) + " was: " + a + 
                       "\n*******************************\n");    
