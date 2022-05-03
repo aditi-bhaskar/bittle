@@ -86,8 +86,7 @@ class Main {
           String guess = "" ;
 
           // taking a guess
-          // note that len usually = 1, unless you're in byte mode (len == 8)
-          // TODO: guess history picks up on things that aren't 0 or 1 - track this down!
+          // note that len == 1 (unless you're in byte mode len == 8)
           System.out.println("enter your next guess............................") ;
 
           while (!isStringCorrectLength(guess, len) || !isStringBinary(guess)) {
@@ -96,7 +95,7 @@ class Main {
             guess = s.nextLine() ;
           }
 
-          //incrimenting guess count and complimenting player
+          //incrementing guess count and complimenting player
           System.out.println("nice guess!") ;
           guess_count += 1 ;
 
@@ -123,7 +122,7 @@ class Main {
             is_game_over = youWinOnceAgain(guess_count, len, ans) ;
           }
         }    
-      } else { //bc sometimes people be dumb and don't follow instructions
+      } else { //bc sometimes sentient beings aren't smart
         System.out.println("please input one of the options.");
       }
     }  
@@ -133,10 +132,10 @@ class Main {
   /* "Brown paper packages tied up with strings...
       These are a few of my favorite things..."
   */
-  
+
   public static boolean isStringBinary(String g) {
     boolean ret = true ;
-    //checking if the string is in binary (0 and/or 1)
+    //checking if the string is in binary (0 or 1)
     for (int i = 0; i < g.length(); i++) {
       if (!(g.substring(i, i+1).equals("1")) && !(g.substring(i, i+1).equals("0"))) {
         ret = false ;
