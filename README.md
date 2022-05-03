@@ -2,6 +2,7 @@
 guess the bit... or switch into byte mode for a challenge!
 
 ===============================================
+
 To play:
   * cd [into folder]
   * git clone https://github.com/aditi-bhaskar/bittle.git
