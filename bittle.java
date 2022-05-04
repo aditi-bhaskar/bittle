@@ -28,7 +28,7 @@ class Main {
 												"  a - play byte mode (advanced)?\n" +
 												"  s - display your stats\n" + 
 												"  q - quit?\n" + 
-												"\n>>") ;
+												"\n>> ") ;
 			String play = s.nextLine() ;
 			System.out.print(".................................... \n") ; 
 
@@ -70,17 +70,7 @@ class Main {
 				}
 
             // instructions on how to play
-				System.out.println(".................................... \n" +
-				"How to play:\n" +
-				"A \"bit\" is a one or zero. bits (and bytes) represent stuff in binary.\n" +
-            "Eight bits make a byte!\n" +
-				"enter a starting " + konstantFinder(len) + ", then repeatedly enter \n" +
-				"more " + konstantFinder(len) + "s until you guess the correct " + konstantFinder(len) + " \n" +
-				" ->  * * means it's not in the " + konstantFinder(len) + "\n" +
-				" ->  + + means it's in " + konstantFinder(len) + ", incorrect spot\n" +
-				" ->      (by itself) means it's in " + konstantFinder(len) + ", correct spot\n" +
-				"good luck!\n................................ \n" +
-            "You are playing " + toggle + "\n") ;
+            System.out.println(instructionsToPlay(len, toggle)) ;
 				
 				// starting the play
 				ArrayList<String> past_guesses = new ArrayList<String>() ;
@@ -95,7 +85,7 @@ class Main {
 
 					while (!isStringCorrectLength(guess, len) || !isStringBinary(guess)) {
 						//taking a guess from user
-						System.out.print("only " + len + " bits (either 0 or 1) allowed:\n>>") ;
+						System.out.print("only " + len + " bits (either 0 or 1) allowed:\n>> ") ;
 						guess = s.nextLine() ;
 					}
 
@@ -117,18 +107,22 @@ class Main {
 							incorrect = true ;
 						}
 					}
-
+               
 					//printing
 					past_guesses.add(printing) ;
 					printPastGuesses(past_guesses);
 
-					if (!incorrect) {   
-						is_game_over = youWinOnceAgain(guess_count, len, ans) ;
-						if (len == 1) 
-							bit_guess_count.add(guess_count) ;
-						else 
-							byte_guess_count.add(guess_count) ;
-					}
+               if (!incorrect || past_guesses.size() >= 42) {
+                  if (len == 1) 
+                    bit_guess_count.add(guess_count) ;
+                  else 
+                    byte_guess_count.add(guess_count) ;
+
+                  if (!incorrect) 
+                    is_game_over = youWinOnceAgain(guess_count, len, ans); // , "win") ;
+                  //else //
+                  // TODO: add the losing thing
+               }
 				}    
 			} 
 			else { //bc sometimes sentient beings aren't smart
@@ -173,6 +167,19 @@ class Main {
          ret ;
       //}
 	}
+   public static String instructionsToPlay(int binaryLength, String togglee) {
+      return (".................................... \n" +
+      "How to play:\n" +
+      "A \"bit\" is a one or zero. bits (and bytes) represent stuff in binary.\n" +
+      "Eight bits make a byte!\n" +
+      "enter a starting " + konstantFinder(binaryLength) + ", then repeatedly enter \n" +
+      "more " + konstantFinder(binaryLength) + "s until you guess the correct " + konstantFinder(binaryLength) + " \n" +
+      " ->  * * means it's not in the " + konstantFinder(binaryLength) + "\n" +
+      " ->  + + means it's in " + konstantFinder(binaryLength) + ", incorrect spot\n" +
+      " ->      (by itself) means it's in " + konstantFinder(binaryLength) + ", correct spot\n" +
+      "good luck!\n................................ \n" +
+      "You are playing " + togglee + "\n") ;
+   }
 	public static boolean isStringBinary(String g) {
 		boolean ret = true ;
 		//checking if the string is in binary (0 or 1)
