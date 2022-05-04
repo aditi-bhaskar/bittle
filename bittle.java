@@ -13,16 +13,11 @@ class Main {
     System.out.println("\n\n~~~~ PLAYING BITTLE ~~~~\n") ; 
     
     //other initializations
-    ArrayList<String> past_guesses = new ArrayList<String>() ;
-    int guess_count = 0 ;
-    boolean byte_mode = false ;
-    int len = 1 ;
+    ArrayList<Integer> bit_guess_count = new ArrayList<Integer>() ;
+    ArrayList<Integer> byte_guess_count = new ArrayList<Integer>() ;
 
     //and, now to the game
     while(!is_play_over) {
-      for (int i = past_guesses.size() - 1; i >= 0; i--) {
-        past_guesses.remove(past_guesses.get(i)) ;
-      }
         
       is_game_over = false ;
 
@@ -31,47 +26,50 @@ class Main {
                         "Would you like to:\n" + 
                         "  p - play bit mode (novice)?\n" +
                         "  a - play byte mode (advanced)?\n" +
+                        "  s - display your stats\n" + 
                         "  q - quit?\n" + 
-                        "enter the mode's corresponding letter \n>>") ;
+                        "\n>>") ;
       String play = s.nextLine() ;
       System.out.print(".................................... \n") ; 
 
       if (play.equals("q")) { // QUITTING
         is_play_over = true ;
+        s.close() ;
         System.out.println("You have sucessfully quit bittle :)\n" + 
                             "Have a \"binary\"-ific day!") ;
       } 
-      if (play.equals("p") || play.equals("a")) {// -- PLAY GAME
+      else if (play.equals("s")) { // PRINT PLAYER STATS
+        System.out.println("\n---Bit Stats--- \n" + statsPrinter(bit_guess_count)) ;
+        System.out.println("\n---Byte Stats--- \n" + statsPrinter(byte_guess_count)) ;
+      } 
+      else if (play.equals("p") || play.equals("a")) { // PLAY GAME
         // P = regular (bit) mode
         // A = byte mode
         System.out.println("Starting game now.") ;
 
         System.out.println(".................................... \n" +
         "How to play:\n" +
-        "A \"bit\" is a one or zero. bits represent stuff in binary." + 
-        "enter a starting BIT," +
-        "then repeatedly enter more bits\n" +
-        "until you guess the correct bit \n" +
-        " >> *letter* means it's not in the bit\n" +
-        " >> +letter+ means it's in bit, incorrect spot\n" +
-        " >>  letter  (by itself) means it's in bit, correct spot\n" +
+        "A \"bit\" is a one or zero. bits represent stuff in binary.\n" + 
+        "enter a starting BIT, then repeatedly enter \n" +
+        "more bits until you guess the correct bit \n" +
+        "    *letter* means it's not in the bit\n" +
+        "    +letter+ means it's in bit, incorrect spot\n" +
+        "     letter  (by itself) means it's in bit, correct spot\n" +
         "good luck!\n................................ \n") ;
 
-        // switching to/fro      
+        // switching to/fro   
+        int len ;
         String toggle = "" ;
         if (play.equals("p")) {
-          byte_mode = false ;
           len = 1 ;
           toggle = "bit mode" ;
         }
         else { // play.equals("a")
-          byte_mode = true ;
           len = 8 ;
           toggle = "byte mode" ;
         }
         System.out.println("Eight bits make a byte!\n" + 
-        "You are playing " + toggle + "\n\n") ;
-
+        "You are playing " + toggle + "\n") ;
 
         //now, randomly creating the answer
         String ans = "" ;
@@ -84,7 +82,8 @@ class Main {
         }
         
         // starting the play
-        guess_count = 0 ;
+        ArrayList<String> past_guesses = new ArrayList<String>() ;
+        int guess_count = 0 ;
         while (!is_game_over) {
           
           String guess = "" ;
@@ -124,9 +123,14 @@ class Main {
 
           if (!incorrect) {   
             is_game_over = youWinOnceAgain(guess_count, len, ans) ;
+            if (len == 1) 
+              bit_guess_count.add(guess_count) ;
+            else 
+              byte_guess_count.add(guess_count) ;
           }
         }    
-      } else { //bc sometimes sentient beings aren't smart
+      } 
+      else { //bc sometimes sentient beings aren't smart
         System.out.println("please input one of the options.");
       }
     }  
@@ -136,7 +140,29 @@ class Main {
   /* "Brown paper packages tied up with strings...
       These are a few of my favorite things..."
   */
-
+  public static String statsPrinter(ArrayList<Integer> guess_history) {
+    // calculating stats
+    double maths = 0.0 ;
+    int min = guess_history.get(0) ;
+    int max = guess_history.get(0) ;
+    for (Integer g : guess_history) {
+      maths += g ;
+      if (g < min)
+        min = g ;
+      if (g > max)
+        max = g ;
+    }
+    maths /= guess_history.size() ;
+    // some random stuff
+    String ret = "" ;
+    if (maths >= 10) {
+      ret = "\nYour odds of being a robot are " + (maths * 30 / 100) ;
+    }
+    return "Your average guess count was: " + Double.toString(maths) + 
+           "\nYour minimum guess count was: " + Integer.toString(min) +
+           "\nYour maximum guess count was " + Integer.toString(max) +
+           ret ;
+  }
   public static boolean isStringBinary(String g) {
     boolean ret = true ;
     //checking if the string is in binary (0 or 1)
