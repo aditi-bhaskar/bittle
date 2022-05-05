@@ -11,9 +11,17 @@ class Main {
 		System.out.println("\n\n~~~~ PLAYING BITTLE ~~~~\n") ; 
 		
 		//other initializations
-		ArrayList<Integer> bit_guess_count = new ArrayList<Integer>() ;
-		ArrayList<Integer> byte_guess_count = new ArrayList<Integer>() ;
-		ArrayList<Integer> nibble_guess_count = new ArrayList<Integer>() ;
+		ArrayList<Integer> trash = new ArrayList<Integer>() ;
+		ArrayList<ArrayList<Integer>> condensed_guess_counts = new ArrayList<ArrayList<Integer>>() ;
+		condensed_guess_counts.add(0, trash) ;
+		condensed_guess_counts.add(1, new ArrayList<Integer>()) ; // bits
+		condensed_guess_counts.add(2, trash) ;
+		condensed_guess_counts.add(3, trash) ;
+		condensed_guess_counts.add(4, new ArrayList<Integer>()) ; // nibbles
+		condensed_guess_counts.add(5, trash) ;
+		condensed_guess_counts.add(6, trash) ;
+		condensed_guess_counts.add(7, trash) ;
+		condensed_guess_counts.add(8, new ArrayList<Integer>()) ; // bytes
 
 		//and, now to the game
 		boolean is_play_over = false ; // for the "play"
@@ -21,32 +29,25 @@ class Main {
 		boolean isPrintingInstructions = true ;
 			while(!is_play_over) {
 					
-				is_game_over = false ;
+			is_game_over = false ;
 
-				// player action...
-				System.out.print(".................................... \n" + 
-									"Would you like to:\n" + 
-									"  p - play bit mode (novice)?\n" +
-									"  n - play nibble mode (medium)?\n" +
-									"  a - play byte mode (advanced)?\n" +
-									"  i - turn on/off instructions?\n" + 
-									"  s - display your stats?\n" + 
-									"  q - quit?\n" + 
-									"\n>> ") ;
-				String play = s.nextLine() ;
-				System.out.print(".................................... \n") ; 
+			// player action...
+			String play = getPlayerAction(s) ;
 
-				if (play.equals("q")) { // QUITTING
-					is_play_over = true ;
-					s.close() ;
-					System.out.println("You have sucessfully quit bittle :)\n" + 
-										"Have a \"binary\"-ific day!\n") ;
-				} 
-				else if (play.equals("s")) { // PRINT PLAYER STATS
-					System.out.println("\n---Bit Stats--- \n" + statsPrinter(bit_guess_count)) ;
-					System.out.println("\n---Nibble Stats--- \n" + statsPrinter(nibble_guess_count)) ;
-					System.out.println("\n---Byte Stats--- \n" + statsPrinter(byte_guess_count)) ;
-				} 
+			if (play.equals("q")) { // QUITTING
+				is_play_over = true ;
+				s.close() ;
+				System.out.println("You have sucessfully quit bittle :)\n" + 
+									"Have a \"binary\"-ific day!\n") ;
+			} 
+			else if (play.equals("s")) { // PRINT PLAYER STATS
+				System.out.println("\n---Bit Stats--- \n" + 
+									statsPrinter(condensed_guess_counts.get(1))) ;
+				System.out.println("\n---Nibble Stats--- \n" + 
+									statsPrinter(condensed_guess_counts.get(4))) ;
+				System.out.println("\n---Byte Stats--- \n" + 
+									statsPrinter(condensed_guess_counts.get(8))) ;
+			} 
 			else if (play.equals("i")) { // INSTRUCTIONS on HOW TO PLAY
 				isPrintingInstructions = !isPrintingInstructions ;
 				System.out.println(" -- \"how to play\" switched " +
@@ -119,14 +120,9 @@ class Main {
 
 					// conditions for exiting the game
 					// and, I use 42 as a max for obvious reasons here.
-					// if you don't understand, then, so long.
+					// if you don't understand, then, so long...
 					if (!incorrect || past_guesses.size() >= 42) {
-						if (len == 1)  		//bit mode
-							bit_guess_count.add(guess_count) ;
-						else if (len == 4) 	// nibble mode
-							nibble_guess_count.add(guess_count) ;
-						else           		//byte mode
-							byte_guess_count.add(guess_count) ;
+						condensed_guess_counts.get(len).add(guess_count) ;
 
 						is_game_over = true ;
 						if (!incorrect) 
@@ -147,6 +143,20 @@ class Main {
 	/* "Brown paper packages tied up with strings...
 			These are a few of my favorite things..."
 	*/
+	public static String getPlayerAction(Scanner s) {
+		System.out.print(".................................... \n" + 
+						"Would you like to:\n" + 
+						"  p - play bit mode (novice)?\n" +
+						"  n - play nibble mode (medium)?\n" +
+						"  a - play byte mode (advanced)?\n" +
+						"  i - turn on/off instructions?\n" + 
+						"  s - display your stats?\n" + 
+						"  q - quit?\n" + 
+						"\n>> ") ;
+		String play = s.nextLine() ;
+		System.out.print(".................................... \n") ;
+		return play ;
+	}
 	public static String statsPrinter(ArrayList<Integer> guess_history) {
 		// calculating stats
 		double maths = 0.0 ;
