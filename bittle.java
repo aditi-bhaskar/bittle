@@ -178,7 +178,7 @@ class Main {
 			// some random stuff
 			String ret = "" ;
 			if (maths >= 10) {
-				ret = "\nYour odds of being a robot are " + (maths * 30 / 100) ;
+				ret = "\nYour odds of being a robot are " + (maths * 30 / 10) + "%" ;
 			}
 		// and, a lengthy return statement, starring my new obsession with ?:
 		return (guess_history.size() == 0) ? 
@@ -199,7 +199,7 @@ class Main {
 		"A \"bit\" is a one or zero. bits (and nibbles, and bytes) represent stuff in binary.\n" +
 		"Eight bits make a byte!\n" +
 		"enter a starting " + konstantFinder(binaryLength) + ", then repeatedly enter more " +
-        konstantFinder(binaryLength) + "s until you guess the correct " + konstantFinder(binaryLength) + " \n" +
+		konstantFinder(binaryLength) + "s until you guess the correct " + konstantFinder(binaryLength) + " \n" +
 		" ->  * * means it's not in the " + konstantFinder(binaryLength) + "\n" +
 		" ->  + + means it's in " + konstantFinder(binaryLength) + ", incorrect spot\n" +
 		" ->      (by itself) means it's in " + konstantFinder(binaryLength) + ", correct spot\n" +
@@ -217,7 +217,7 @@ class Main {
 		return ret ;
 	}
 	public static boolean isStringCorrectLength(String g, int l) {
-      //if the length isn't the length, then it probably isn't the correct length
+	  //if the length isn't the length, then it probably isn't the correct length
 		return (g.length() != l) ? false : true ;
 	}
 	public static void printPastGuesses(ArrayList<String> past) {
