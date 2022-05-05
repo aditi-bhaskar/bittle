@@ -63,11 +63,8 @@ class Main {
 			   //now, randomly creating the answer
 				String ans = "" ;
 				for (int i = 0; i < len; i++) {
-					int idek = (int)(Math.random() * 2) ;
-					if (idek == 0)
-						ans += "0" ;
-					else // idek == 1
-						ans += "1" ;
+               //the value can either be 0 or 1; randomly chosen - 
+               ans += ((int)(Math.random() * 2) == 0) ? "0" : "1" ;
 				}
 
             if (isPrintingInstructions) {
@@ -169,10 +166,11 @@ class Main {
 	  if (min == -1 || max == -1) {
 		 return "You haven't tried this mode yet :( " ;
 	  } //else {
-		return " average guess count : " + Double.toString(maths) + 
-		 		"\n minimum guess count : " + min +
-		 		"\n maximum guess count : " + max +
-		 ret ;
+		return   " games played : " + guess_history.size() + 
+               "\n average guess count : " + Double.toString(maths) + 
+		 		   "\n minimum guess count : " + min +
+		 		   "\n maximum guess count : " + max +
+		         ret ;
 	  //}
 	}
 	// I know it's spelled 'toggle', but the extra e makes it exciting
