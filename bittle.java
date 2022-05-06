@@ -15,22 +15,26 @@ class Main {
 		Scanner s = new Scanner(System.in) ;
 
 		// so, the user commands are here so I can switch them easily
-		final String quit = "q" ;
-		final String play_bit_mode = "bit" ;
-		final String play_nibble_mode = "nibble" ;
-		final String play_byte_mode = "byte" ;
-		final String get_instructions = "howto" ;
-		final String display_stats = "stats" ;
-		final ArrayList<String> commands = new ArrayList<String>() ;
+		final String[] quit = {"q", "quit game"} ;
+		final String[] play_bit_mode = {"bit", "play bit mode (novice)"} ;
+		final String[] play_nibble_mode = {"nibl", "play nibble mode (intermediate)"} ;
+		final String[] play_byte_mode = {"byte", "play bit mode (advanced)"} ;
+		final String[] get_instructions = {"inst", "turn on/off instructions?"} ;
+		final String[] display_stats = {"stat", "display your stats?"} ;
+		final String[] get_quote = {"quot", "see a scintillating quote"} ;
+		final String[] add_quote = {"addq", "add a scintillating quote"} ;
+		final ArrayList<String[]> commands = new ArrayList<String[]>() ;
 		commands.add(quit) ; 				// 0
 		commands.add(play_bit_mode) ; 		// 1
 		commands.add(play_nibble_mode) ;    // 2
 		commands.add(play_byte_mode) ; 		// 3
 		commands.add(get_instructions) ; 	// 4
 		commands.add(display_stats) ;		// 5
+		commands.add(get_quote) ;			// 6
+		commands.add(add_quote) ;			// 7
 
-		// in case you didn't realize what you were playing: 
-		System.out.println("\n\n~~~~ PLAYING BITTLE ~~~~\n") ; 
+		// !!! in case you didn't realize what you were playing !!!
+		System.out.print("\n\n~~~~ PLAYING BITTLE ~~~~\n\n") ; 
 		
 		// other initializations
 		ArrayList<Integer> rubbish = new ArrayList<Integer>() ;
@@ -45,42 +49,57 @@ class Main {
 		condensed_guess_counts.add(7, rubbish) ;
 		condensed_guess_counts.add(8, new ArrayList<Integer>()) ; // bytes
 
+		// and, a quote, for good measure
+		ArrayList<String[]> quotes_coll = new ArrayList<String[]>() ;
+		quotes_coll.add(new String[]{"So long and thanks for all the fish", "Douglas Adams"}) ;
+
 		//and, now to the game
 		boolean is_play_over = false ; // for the "play"
 		boolean is_game_over = false ; // for each specific sub-game of bittle
 		boolean isPrintingInstructions = true ;
 		while(!is_play_over) {
-					
+			
 			is_game_over = false ;
 
 			// player action...
 			String play = getPlayerAction(s, commands) ;
 
-			if (play.equals(quit)) { // QUITTING
+			if (play.equals(quit[0])) { // QUITTING
 				is_play_over = true ;
 				s.close() ;
-				System.out.println("You have sucessfully quit bittle :)\n" + 
-									"Have a \"binary\"-ific day!\n") ;
+				System.out.print(
+					"You have sucessfully quit bittle :)\n" + 
+					"Have a \"binary\"-ific day!\n\n"
+				) ;
 			} 
-			else if (play.equals(display_stats)) { // PRINT PLAYER STATS
-				System.out.println(
+			else if (play.equals(display_stats[0])) { // PRINT PLAYER STATS
+				System.out.print(
 					"\n---Bit Stats--- \n" + 
 					statsPrinter(condensed_guess_counts.get(1)) +
 					"\n\n---Nibble Stats--- \n" + 
 					statsPrinter(condensed_guess_counts.get(4)) +
 					"\n\n---Byte Stats--- \n" + 
-					statsPrinter(condensed_guess_counts.get(8))
+					statsPrinter(condensed_guess_counts.get(8)) + 
+					"\n"
 				);
 			} 
-			else if (play.equals(get_instructions)) { // INSTRUCTIONS on HOW TO PLAY
+			else if (play.equals(get_instructions[0])) { // INSTRUCTIONS on HOW TO PLAY
 				isPrintingInstructions = !isPrintingInstructions ;
-				System.out.println(
+				System.out.print(
 					" -- \"how to play\" instructions switched " +
-					(isPrintingInstructions ? "on" : "off")) ;
+					(isPrintingInstructions ? "on" : "off") + 
+					"\n"
+				) ;
 			}
-			else if (play.equals(play_bit_mode) // PLAY GAME, bit-mode (len = 1) 
-					|| play.equals(play_nibble_mode) // nibble mode (len = 4)
-					|| play.equals(play_byte_mode)) { // advanced / byte mode (len = 8)
+			else if (play.equals(get_quote[0])) { // QUOTE from the Hitch Hiker's Guide to the Galaxy
+				System.out.print(getQuote(quotes_coll) + "\n") ;
+			}
+			else if (play.equals(add_quote[0])) { // QUOTE from the Hitch Hiker's Guide to the Galaxy
+				System.out.print(addQuote(quotes_coll, s) + "\n") ;
+			}
+			else if (play.equals(play_bit_mode[0]) // PLAY GAME, bit-mode (len = 1) 
+					|| play.equals(play_nibble_mode[0]) // nibble mode (len = 4)
+					|| play.equals(play_byte_mode[0])) { // advanced / byte mode (len = 8)
 							
 				int len = konstantFinderInverse(play, commands) ;
 
@@ -93,7 +112,7 @@ class Main {
 
 				if (isPrintingInstructions) {
 					// instructions on how to play
-					System.out.println(instructionsToPlay(len, isPrintingInstructions)) ;
+					System.out.print(instructionsToPlay(len, isPrintingInstructions) + "\n") ;
 				}
 
 				// starting the game
@@ -103,7 +122,7 @@ class Main {
 
 					// taking a guess
 					// note that len == 1 (unless you're in byte mode len == 8)
-					System.out.println("\nenter your next guess............................") ;
+					System.out.print("\nenter your next guess............................\n") ;
 
 					String guess = "" ;
 					while (!isStringCorrectLength(guess, len) || !isStringBinary(guess)) {
@@ -113,7 +132,7 @@ class Main {
 					}
 
 					//incrementing guess count and complimenting player
-					System.out.println("nice guess!") ;
+					System.out.print("nice guess!\n") ;
 					guess_count += 1 ;
 
 					//comparing Strings and printing
@@ -151,47 +170,61 @@ class Main {
 				}    
 			} 
 			else { //bc sometimes sentient beings aren't the most brilliant
-				System.out.println("please have some sense and input one of the below options.");
+				System.out.print("please have some sense and input one of the below options.\n");
 			}
 		}  
 	}
 
 	// and now, for my little code-packages (aka methods aka functions aka procedures)
-	// they are in alphabetical order
+	// they are in alphabetical order, in case you were wondering
 	/* "Brown paper packages tied up with strings...
 			These are a few of my favorite things..."
 	*/
 	
-	public static String getPlayerAction(Scanner s, ArrayList<String> commands) {
-		System.out.print(".................................... \n" + 
-						"Would you like to:\n" + 
-						"  " + commands.get(1) + "\t\t - play bit mode (novice)?\n" +
-						// todo: add the \t back to nibble mode command
-						"  " + commands.get(2) + "\t - play nibble mode (intermediate)?\n" +
-						"  " + commands.get(3) + "\t\t - play byte mode (advanced)?\n" +
-						"  " + commands.get(4) + "\t\t - turn on/off instructions?\n" + 
-						"  " + commands.get(5) + "\t\t - display your stats?\n" + 
-						"  " + commands.get(0) + "\t\t - quit?\n" + 
-						"\n>> ") ;
+	public static String addQuote(ArrayList<String[]> quotes_coll, Scanner s) {
+		System.out.print("enter quote:\n>> ") ;
+		String quote = s.nextLine() ;
+		System.out.print("\nenter author/speaker/accreditted person:\n>> ") ;
+		String credit = s.nextLine() ;
+		quotes_coll.add(new String[]{quote, credit}) ;
+		return "Sucessfully added your quote to the collection!" ;
+	}
+	public static String getQuote(ArrayList<String[]> quotes_coll) {
+		if (quotes_coll.size() == 0) {
+			return "no quotes :(" ;
+		}
+		String[] quoteAndCredit = quotes_coll.get((int)(Math.random() * quotes_coll.size())) ;
+		return "  \"" + quoteAndCredit[0] + "\"\n      ~ " + quoteAndCredit[1] + "\n";
+
+	}
+	public static String getPlayerAction(Scanner s, ArrayList<String[]> commands) {
+		System.out.print( 
+			".................................... \n" + 
+			"Would you like to:\n" 
+		) ;
+		for (String[] c : commands) {
+			System.out.print("  " + c[0] + "\t\t - " + c[1] + " \n") ;
+		}
+		System.out.print("\n>> ") ;
 		String play = s.nextLine() ;
 		System.out.print(".................................... \n") ;
 		return play ;
 	}
 	public static String instructionsToPlay(int len, boolean isPrintingInstructions) {
 		return isPrintingInstructions ?
-		".................................... \n" +
-		"How to play:\n" +
-		"A \"bit\" is a one or zero. bits (and nibbles, and bytes) represent stuff in binary.\n" +
-		"Eight bits make a byte!\n" +
-		"enter a starting " + konstantFinder(len) + ", then repeatedly enter more " +
-		konstantFinder(len) + "s until you guess the correct " + konstantFinder(len) + " \n" +
-		" ->  * * means it's not in the " + konstantFinder(len) + "\n" +
-		" ->  + + means it's in " + konstantFinder(len) + ", incorrect spot\n" +
-		" ->      (by itself) means it's in " + konstantFinder(len) + ", correct spot\n" +
-		"good luck!\n................................ \n" +
-		"You are playing " + konstantFinder(len) + " mode\n" 
-		:
-		"" ;
+			".................................... \n" +
+			"How to play:\n" +
+			"A \"bit\" is a one or zero. bits (and nibbles, and bytes) represent stuff in binary.\n" +
+			"Eight bits make a byte!\n" +
+			"enter a starting " + konstantFinder(len) + ", then repeatedly enter more " +
+			konstantFinder(len) + "s until you guess the correct " + konstantFinder(len) + " \n" +
+			" ->  * * means it's not in the " + konstantFinder(len) + "\n" +
+			" ->  + + means it's in " + konstantFinder(len) + ", incorrect spot\n" +
+			" ->      (by itself) means it's in " + konstantFinder(len) + ", correct spot\n" +
+			"good luck!\n................................ \n" +
+			"You are playing " + konstantFinder(len) + " mode\n" 
+			:
+			"" ;
 	}
 	public static boolean isStringBinary(String g) {
 		boolean ret = true ;
@@ -224,24 +257,24 @@ class Main {
 		ret = (len == 4) ? "nibble" : ret ;
 		return ret ;
 	}
-	public static int konstantFinderInverse(String play, ArrayList<String> commands) {
+	public static int konstantFinderInverse(String play, ArrayList<String[]> commands) {
 		// switching to && fro modes! 
 		//  1 if it's in bit mode, otherwise
-		//  4 if it's in nibble mode, otherwie
+		//  4 if it's in nibble mode, otherwise
 		//  8 (default -> byte mode)
-		//								byte						     nibble   	bit	
-		return play.equals(commands.get(3)) ? 8 : (play.equals(commands.get(2)) ? 4 : 1);
+		//	byte, nibble, bit	
+		return play.equals(commands.get(3)[0]) ? 8 : (play.equals(commands.get(2)[0]) ? 4 : 1);
 		
 	}
 	public static String statsPrinter(ArrayList<Integer> guess_history) {
 		// calculating stats
 		double maths = 0.0 ;
-	  int min = -1 ;
-	  int max = -1 ;
-	  if (guess_history.size() != 0) {
-		 min = guess_history.get(0) ;
-		 max = guess_history.get(0) ;
-	  }
+		int min = -1 ;
+		int max = -1 ;
+		if (guess_history.size() != 0) {
+			min = guess_history.get(0) ;
+			max = guess_history.get(0) ;
+		}
 		for (Integer g : guess_history) {
 			maths += g ;
 			if (g < min)
@@ -270,12 +303,16 @@ class Main {
 	  
 	}
 	public static void winOrLose(int guesscnt, int len, String ans, String isSuccess) {
-		System.out.println("*******************************\n" + 
-							"GAME OVER!\nYou " + isSuccess + 
-							" with " + guesscnt + " guess(es)\n" +
-							"The " + konstantFinder(len) + " was: " + ans + 
-							"\n*******************************\n");    
+		System.out.print(
+			"*******************************\n" + 
+			"GAME OVER!\nYou " + isSuccess + 
+			" with " + guesscnt + " guess(es)\n" +
+			"The " + konstantFinder(len) + " was: " + ans + 
+			"\n*******************************\n\n"
+		);    
 	}
+
+	// in case you're really bored, and have literally nothing to do...
 	
 }
 
