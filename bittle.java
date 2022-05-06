@@ -21,8 +21,6 @@ class Main {
 		final String[] play_byte_mode = {"byte", "play bit mode (advanced)"} ;
 		final String[] get_instructions = {"inst", "turn on/off instructions?"} ;
 		final String[] display_stats = {"stat", "display your stats?"} ;
-		final String[] get_quote = {"quot", "see a scintillating quote"} ;
-		final String[] add_quote = {"addq", "add a scintillating quote"} ;
 		final ArrayList<String[]> commands = new ArrayList<String[]>() ;
 		commands.add(quit) ; 				// 0
 		commands.add(play_bit_mode) ; 		// 1
@@ -30,8 +28,7 @@ class Main {
 		commands.add(play_byte_mode) ; 		// 3
 		commands.add(get_instructions) ; 	// 4
 		commands.add(display_stats) ;		// 5
-		commands.add(get_quote) ;			// 6
-		commands.add(add_quote) ;			// 7
+
 
 		// !!! in case you didn't realize what you were playing !!!
 		System.out.print("\n\n~~~~ PLAYING BITTLE ~~~~\n\n") ; 
@@ -90,12 +87,6 @@ class Main {
 					(isPrintingInstructions ? "on" : "off") + 
 					"\n"
 				) ;
-			}
-			else if (play.equals(get_quote[0])) { // QUOTE from the Hitch Hiker's Guide to the Galaxy
-				System.out.print(getQuote(quotes_coll) + "\n") ;
-			}
-			else if (play.equals(add_quote[0])) { // QUOTE from the Hitch Hiker's Guide to the Galaxy
-				System.out.print(addQuote(quotes_coll, s) + "\n") ;
 			}
 			else if (play.equals(play_bit_mode[0]) // PLAY GAME, bit-mode (len = 1) 
 					|| play.equals(play_nibble_mode[0]) // nibble mode (len = 4)
@@ -181,22 +172,6 @@ class Main {
 			These are a few of my favorite things..."
 	*/
 	
-	public static String addQuote(ArrayList<String[]> quotes_coll, Scanner s) {
-		System.out.print("enter quote:\n>> ") ;
-		String quote = s.nextLine() ;
-		System.out.print("\nenter author/speaker/accreditted person:\n>> ") ;
-		String credit = s.nextLine() ;
-		quotes_coll.add(new String[]{quote, credit}) ;
-		return "Sucessfully added your quote to the collection!" ;
-	}
-	public static String getQuote(ArrayList<String[]> quotes_coll) {
-		if (quotes_coll.size() == 0) {
-			return "no quotes :(" ;
-		}
-		String[] quoteAndCredit = quotes_coll.get((int)(Math.random() * quotes_coll.size())) ;
-		return "  \"" + quoteAndCredit[0] + "\"\n      ~ " + quoteAndCredit[1] + "\n";
-
-	}
 	public static String getPlayerAction(Scanner s, ArrayList<String[]> commands) {
 		System.out.print( 
 			".................................... \n" + 
