@@ -1,5 +1,5 @@
 # bittle
-guess the bit... or switch into byte mode for a challenge!
+guess the bit... or switch into nibble or byte mode for a challenge!
 
 ===============================================
 
