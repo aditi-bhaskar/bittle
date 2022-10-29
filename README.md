@@ -1,5 +1,6 @@
 # bittle
 guess the bit... or switch into nibble or byte mode for a challenge!
+Play online: https://bittlesuite.github.io/
 
 ===============================================
 
