@@ -4,7 +4,7 @@ Play online: https://bittlesuite.github.io/
 
 ===============================================
 
-To play:
+To play on desktop:
   * cd [into folder]
   * git clone https://github.com/aditi-bhaskar/bittle.git
   * open command line & start playing!
